@@ -1,0 +1,76 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.3.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      transportProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+suspensionProperties
+{
+
+	//- Bulk phase viscosity
+	nu0		nu0		[ 0 2 -1 0 0 0 0 ] 0.003428571;
+
+	//- Particle radius
+	a		a [ 0 1 0 0 0 0 0 ] 70e-6;
+
+	//- Maximum packing fraction
+	cMax	cMax	[ 0 0 0 0 0 0 0 ] 0.64;
+
+
+	shearViscosityModel morrisBoulay;
+	morrisBoulayCoeffs
+	{
+		aP		aP		[ 0 0 0 0 0 0 0 ] 0.0;
+		bP		bP		[ 0 0 0 0 0 0 0 ] 2.5;
+		cP		cP		[ 0 0 0 0 0 0 0 ] 0.1;
+	}
+
+
+	normalViscosityModel morrisBoulayNormal;
+	morrisBoulayNormalCoeffs
+	{}
+
+	anisotropicStressTensorModel improvedFrameInvariantAnisotropicStressTensor;
+
+	improvedFrameInvariantAnisotropicStressTensorCoeffs
+	{
+		lambda1	lambda1 [ 0 0 0 0 0 0 0 ] 1.0;		
+		lambda2	lambda2 [ 0 0 0 0 0 0 0 ] 0.8;		
+		lambda3	lambda3 [ 0 0 0 0 0 0 0 ] 0.5;
+		cut 		cut [ 0 -1 0 0 0 0 0 ] 70e-3;
+		decay		decay [ 0 0 0 0 0 0 0 ] 150.0 ;
+		rTol		rTol [ 0 0 0 0 0 0 0 ] 0.001 ;
+		useGradients true;
+	}
+
+
+	nonLocalShearRateModel	localScaleShearRate;
+	localScaleShearRateCoeffs
+	{
+		k	k [0 0 0 0 0 0 0] 2.0e-5;
+		a	a [0 1 0 0 0 0 0] 70e-6;
+	}
+	
+	solidsPressureModel noSolidsPressure;
+	noSolidsPressureCoeffs
+	{}
+
+	hindranceModel richardsonZaki;
+	richardsonZakiCoeffs
+	{
+		alpha	alpha	[ 0 0 0 0 0 0 0 ] 4.0;
+	}
+}
+
+// ************************************************************************* //

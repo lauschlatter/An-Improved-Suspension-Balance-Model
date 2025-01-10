@@ -1,0 +1,12 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # Run from this directory
+
+# Libraries
+wmake libso libs/suspensionModel
+
+# Function objects
+wmake libso libs/functionObjects/checkMassRate
+wmake libso libs/functionObjects/checkTorque
+
+# Solvers
+wmake solvers/suspensionBalanceFoam

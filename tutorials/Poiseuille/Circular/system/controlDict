@@ -1,0 +1,87 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.3.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+application     suspensionBalanceFoam;
+
+startFrom       latestTime;
+
+startTime       0;
+
+stopAt          writeNow;//endTime;
+
+endTime         50000;
+
+deltaT          0.05;
+
+writeControl    adjustableRunTime;
+
+writeInterval   100;
+
+purgeWrite      0;
+
+writeFormat     ascii;
+
+writePrecision  6;
+
+writeCompression compressed;
+
+timeFormat      general;
+
+timePrecision   6;
+
+runTimeModifiable yes;
+
+adjustTimeStep  no;
+
+libs
+(
+	"libcheckMassRate.so"
+);
+
+functions
+{
+    radialSample
+    {
+        start   (0	-0.00315 0);
+        end     (0	0.00315	0);
+
+        fields  (c p gamma U);
+
+        // Sampling and I/O settings
+        #includeEtc "caseDicts/postProcessing/graphs/sampleDict.cfg"
+
+
+        //interpolationScheme cell;
+        interpolationScheme cellPoint;
+
+        /*
+        setFormat   raw;
+        */
+        setConfig
+        {
+            nPoints 100;
+        }
+
+        // Override settings here, e.g.
+        // setConfig { type midPoint; }
+
+        // Must be last entry
+        #includeEtc "caseDicts/postProcessing/graphs/graph.cfg"
+    }
+}
+
+// ************************************************************************* //

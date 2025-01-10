@@ -1,0 +1,137 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.3.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+convertToMeters 0.01;
+
+Rout   2.54;
+Rin  0.64;
+exc 0.5;
+e   #calc "0.5*($Rout-$Rin)";
+pi 3.14159265;
+nCellsx 56;
+nCellsy 64;
+
+
+
+
+vertices
+(
+
+  (#calc "-$Rout" 0 0) // 0
+  (#calc "-$Rin-$e" 0 0) // 1
+  (#calc "-$e" $Rin 0) // 2 
+  (0 $Rout 0) // 3
+  (#calc "-$Rout" 0 0.1) // 4
+  (#calc "-$Rin-$e" 0 0.1) // 5
+  (#calc "-$e" $Rin 0.1) // 6 
+  (0 $Rout 0.1) // 7
+
+  (#calc "$Rin-$e" 0 0) // 8
+  ($Rout 0 0) // 9
+  (#calc "$Rin-$e" 0 0.1) // 10
+  ($Rout 0 0.1) // 11
+
+   (#calc "-$e" #calc "-$Rin" 0) // 12
+   (0 #calc "-$Rout" 0) // 13
+   (#calc "-$e" #calc "-$Rin" 0.1) // 14
+   (0 #calc "-$Rout" 0.1) // 15
+
+);
+
+blocks
+(
+    hex (0 1 2 3 4 5 6 7) ($nCellsx $nCellsy 1) simpleGrading (1 1 1)
+    hex (3 2 8 9 7 6 10 11) ($nCellsx $nCellsy 1) simpleGrading (1 1 1)
+    hex (12 13 9 8 14 15 11 10) ($nCellsx $nCellsy 1) simpleGrading (1 1 1)
+    hex (1 0 13 12 5 4 15 14) ($nCellsx $nCellsy 1) simpleGrading (1 1 1)
+);
+
+edges
+(
+    arc 1 2 (#calc "-$Rin*cos($pi/4)-$e" #calc "$Rin*sin($pi/4)" 0)
+    arc 3 0 (#calc "-$Rout*cos($pi/4)" #calc "$Rout*sin($pi/4)" 0)
+    arc 5 6 (#calc "-$Rin*cos($pi/4)-$e" #calc "$Rin*sin($pi/4)" 0.1)
+    arc 7 4 (#calc "-$Rout*cos($pi/4)" #calc "$Rout*sin($pi/4)" 0.1)
+
+    arc 2 8 (#calc "$Rin*cos($pi/4)-$e" #calc "$Rin*sin($pi/4)" 0)
+    arc 3 9 (#calc "$Rout*cos($pi/4)" #calc "$Rout*sin($pi/4)" 0)
+    arc 6 10 (#calc "$Rin*cos($pi/4)-$e" #calc "$Rin*sin($pi/4)" 0.1)
+    arc 7 11 (#calc "$Rout*cos($pi/4)" #calc "$Rout*sin($pi/4)" 0.1)
+
+    arc 8 12 (#calc "$Rin*cos($pi/4)-$e" #calc "-$Rin*sin($pi/4)" 0)
+    arc 9 13 (#calc "$Rout*cos($pi/4)" #calc "-$Rout*sin($pi/4)" 0)
+    arc 14 10 (#calc "$Rin*cos($pi/4)-$e" #calc "-$Rin*sin($pi/4)" 0.1)
+    arc 15 11 (#calc "$Rout*cos($pi/4)" #calc "-$Rout*sin($pi/4)" 0.1)
+
+    arc 1 12 (#calc "-$Rin*cos($pi/4)-$e" #calc "-$Rin*sin($pi/4)" 0)
+    arc 0 13 (#calc "-$Rout*cos($pi/4)" #calc "-$Rout*sin($pi/4)" 0)
+    arc 5 14 (#calc "-$Rin*cos($pi/4)-$e" #calc "-$Rin*sin($pi/4)" 0.1)
+    arc 15 4 (#calc "-$Rout*cos($pi/4)" #calc "-$Rout*sin($pi/4)" 0.1)
+
+);
+
+boundary
+(
+    internalWall
+    {
+        type wall;
+        faces
+        (
+            (1 2 6 5)
+            (2 8 10 6)
+            (8 12 14 10)
+            (12 1 5 14)
+        );
+    }
+
+    externalWall
+    {
+        type wall;
+        faces
+        (
+            (0 4 7 3)
+            (3 7 11 9)
+            (9 11 15 13)
+            (0 13 15 4)
+
+        );
+    }
+
+
+    frontAndBack
+    {
+        type empty;
+        faces
+        (
+            (0 3 2 1)
+            (4 5 6 7)
+            (2 3 9 8)
+            (6 10 11 7)
+            (8 9 13 12)
+            (10 14 15 11)
+            (0 1 12 13)
+            (4 15 14 5)
+        );
+    }
+
+
+);
+
+mergePatchPairs
+(
+);
+
+// ************************************************************************* //

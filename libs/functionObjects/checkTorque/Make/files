@@ -1,0 +1,3 @@
+checkTorque.C
+
+LIB = $(FOAM_USER_LIBBIN)/libcheckTorque

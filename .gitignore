@@ -1,0 +1,14 @@
+*.[oa]
+*~
+*.dep
+*.o
+*linux*
+linux*
+*lnInclude*
+*oxy*
+*C~
+*H~
+*swp
+doc/*
+log
+*html*

@@ -1,0 +1,3 @@
+checkMassRate.C
+
+LIB = $(FOAM_USER_LIBBIN)/libcheckMassRate
