@@ -11,7 +11,7 @@ This project has the code for simulating the viscosimetric flow of non Brownian 
 OF_PATH$ source OpenFOAM-7/etc/bashrc
 ```
 
-3 - Compile the code:
+3 -  In the project's installation path, compile the code:
 
 ```
 An-Improved-Suspension-Balance-Model$ ./Allwmake
